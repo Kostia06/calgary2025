@@ -9,9 +9,10 @@ import { useGetPostsList } from '@/app/hooks/useGetPostsList';
 import { useState, useEffect, useRef } from 'react';
 import { Input } from '@/components/ui/input';
 import Link from 'next/link';
+import { useGlobalContext } from '@/container/GlobalContext';
 
 export default function Map() {
-    const { posts, isLoading, error } = useGetPostsList();
+    const { posts, isLoading, error, setPosts } = useGetPostsList();
     const [search, setSearch] = useState('');
 
     if (isLoading) {
@@ -104,13 +105,14 @@ const Search = ({ search, setSearch }) => {
     );
 };
 
-const PostCard = ({ post }) => {
-    const { imageUrl, lat, lng, title, description, upvotes, id } = post;
+export const PostCard = ({ post }) => {
+    const { imageUrl, lat, lng, title, description, id } = post;
     const sLat = parseFloat(lat).toFixed(2);
     const sLng = parseFloat(lng).toFixed(2);
     const ref = useRef(null);
     const visible = getVisible(ref);
     const visibleCss = visible ? 'opacity-100 scale-100' : 'scale-50 opacity-0';
+    const { setPosts, posts } = useGetPostsList();
 
     const handleUpvote = async (e) => {
         e.preventDefault();
@@ -121,16 +123,23 @@ const PostCard = ({ post }) => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ postId: id, action: 1 }),
+                body: JSON.stringify({ id: id }),
             });
 
             const data = await response.json();
 
-            console.log(data);
+            // Only update state if the API call was successful
+            posts.map((post) => {
+                if (post.id === id) {
+                    return { ...post, upvotes: post.upvotes + 1 };
+                } else {
+                    return post;
+                }
+            });
 
-            if (!response.ok) {
-                throw new Error(data.error || 'Failed to vote');
-            }
+            window.location.reload();
+
+            console.log(data);
         } catch (error) {
             console.error('Error voting:', error);
             alert(error.message);
@@ -187,13 +196,22 @@ const PostCard = ({ post }) => {
                             {sLat}, {sLng}
                         </span>
                     </Link>
-                    <span className="text-s text-opacity-75">👍 {upvotes}</span>
+                    <span className="text-s text-opacity-75">👍 {post.upvotes}</span>
                 </div>
 
                 {/* Upvote Button */}
                 <div className="flex items-center space-x-6 w-full">
                     <Button
-                        onClick={(e) => handleUpvote(e)}
+                        onClick={(e) =>{
+                             handleUpvote(e)
+                             setPosts(posts.map((post) => {
+                                if (post.id === id) {
+                                    return { ...post, upvotes: post.upvotes + 1 };
+                                } else {
+                                    return post;
+                                }
+                            }))
+                            }}
                         className="w-full bg-p duration-300 ease-in-out transition-all hover:bg-s hover:scale-110 hover:shadow-md hover:shadow-black"
                     >
                         Upvote

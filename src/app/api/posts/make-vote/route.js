@@ -4,7 +4,7 @@ import { NextResponse } from 'next/server';
 
 export async function POST(req) {
     try {
-        const { postId, action } = await req.json(); // action could be 'increase' or 'decrease'
+        const { id } = await req.json(); // action could be 'increase' or 'decrease'
         const { userId } = getAuth(req);
 
         if (!userId) {

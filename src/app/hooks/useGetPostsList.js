@@ -17,6 +17,7 @@ export function useGetPostsList() {
                     throw new Error('Failed to fetch posts');
                 }
                 const data = await response.json();
+                console.log(data)
                 setPosts(data);
                 setError(null);
             } catch (err) {
@@ -30,5 +31,5 @@ export function useGetPostsList() {
         fetchPosts();
     }, []);
 
-    return { posts, isLoading, error };
+    return { posts, isLoading, error, setPosts };
 }
