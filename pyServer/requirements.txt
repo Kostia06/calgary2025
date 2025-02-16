@@ -6,7 +6,6 @@ numpy==2.2.3
 opencv_contrib_python==4.10.0.82
 opencv_python==4.9.0.80
 opencv_python_headless==4.10.0.84
-Pillow==10.0.0
 Pillow==11.1.0
 Requests==2.32.3
 tensorflow==2.10.1
