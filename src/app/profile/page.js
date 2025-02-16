@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/card"
 import Background from '@/components/AnimatedBackground';
 import Animals from '@/components/Animals';
+import cheetah from '@/public/assets/cheetah.png'
 
 export default function Profile() {
   const imageUrl = "https://www.nicepng.com/png/full/27-277590_nyan-cat-png-images-what-is-nyan-cat.png";
@@ -37,6 +38,7 @@ function ProfileCard() {
     setProfile({
       name: user.fullname || "John Doe",
       email: user.email || "example@email.com",
+      pfp: user.avatar_url || cheetah,
       bio: "I love nature so much that nature loves me."
     });
   };
@@ -48,7 +50,8 @@ function ProfileCard() {
   const [profile, setProfile] = useState({
     name: "",
     email: "",
-    bio: ""
+    pfp: "",
+    bio: "",
   });
 
   const handleChange = (e) => {
@@ -96,7 +99,12 @@ function ProfileCard() {
                 </div>
               </div>
               <div className="flex w-1/2 place-content-center place-items-center">
-                <div className="w-24 h-24 rounded-full bg-s" />
+                <>
+                  <img
+                    src={profile.pfp}
+                    className="w-24 h-24 rounded-full bg-s"
+                  />
+                </>
               </div>
             </div>
             <div>
