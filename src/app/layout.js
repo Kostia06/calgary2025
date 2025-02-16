@@ -1,14 +1,14 @@
 import {
     ClerkProvider,
-    SignInButton,
-    SignedIn,
     SignedOut,
+    SignUp,
+    SignedIn,
+    SignOut,
     UserButton,
 } from '@clerk/nextjs';
 import './globals.css';
 import { GlobalContextProvider } from '@/container/GlobalContext';
 import Navbar from '@/components/Navbar';
-import Signup from '@/components/SignUp';
 
 export const metadata = {
     title: 'Create Next App',
@@ -21,7 +21,9 @@ export default function RootLayout({ children }) {
             <html lang="en">
                 <body>
                     <SignedOut>
-                        <Signup />
+                        <div className="w-screen h-screen flex items-center justify-center">
+                            <SignUp routing="hash" />
+                        </div>
                     </SignedOut>
                     <SignedIn>
                         <GlobalContextProvider>
