@@ -106,9 +106,13 @@ const useCamera = (setImageUrl, setUploading, setLatitude, setLongitude) => {
                     // Turn the canvas content into a file
                     canvas.toBlob(async (blob) => {
                         if (blob) {
-                            const file = new File([blob], 'camera_capture.jpg', {
-                                type: blob.type,
-                            });
+                            const file = new File(
+                                [blob],
+                                'camera_capture.jpg',
+                                {
+                                    type: blob.type,
+                                }
+                            );
                             await uploadToSupabase(
                                 file,
                                 setImageUrl,
@@ -147,7 +151,13 @@ const useCamera = (setImageUrl, setUploading, setLatitude, setLongitude) => {
                     type: blob.type,
                 });
                 // lat/lng remain null
-                await uploadToSupabase(file, setImageUrl, setUploading, null, null);
+                await uploadToSupabase(
+                    file,
+                    setImageUrl,
+                    setUploading,
+                    null,
+                    null
+                );
             }
         });
         handleCancelCamera();
@@ -170,11 +180,13 @@ const useCamera = (setImageUrl, setUploading, setLatitude, setLongitude) => {
     };
 };
 
-
-const ImageUploaded = ({ imageUrl, latitude, longitude }) => {
+const ImageUploaded = ({ imageUrl, latitude, longitude, open, setOpen }) => {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [isModalOpen, setIsModalOpen] = useState(false);
+
+    let sLat = latitude ? parseFloat(latitude).toFixed(2) : 0;
+    let sLng = longitude ? parseFloat(longitude).toFixed(2) : 0;
 
     const openModal = () => setIsModalOpen(true);
     const closeModal = () => setIsModalOpen(false);
@@ -183,12 +195,6 @@ const ImageUploaded = ({ imageUrl, latitude, longitude }) => {
     const handleDescriptionChange = (e) => setDescription(e.target.value);
 
     const handleSubmit = async () => {
-        console.log('Title:', title);
-        console.log('Description:', description);
-        // You can also store lat/lng if you want to send them to a server
-        console.log('Latitude:', latitude);
-        console.log('Longitude:', longitude);
-
         const createPost = await fetch('/api/posts/create-post', {
             method: 'POST',
             body: JSON.stringify({
@@ -201,14 +207,14 @@ const ImageUploaded = ({ imageUrl, latitude, longitude }) => {
             headers: {
                 'Content-Type': 'application/json',
             },
-        })
-        console.log(createPost)
+        });
+        setOpen(!open);
     };
-
 
     const handleCancel = () => {
         setTitle('');
         setDescription('');
+        setOpen(!open);
     };
 
     return (
@@ -245,9 +251,9 @@ const ImageUploaded = ({ imageUrl, latitude, longitude }) => {
 
             {/* Display lat/lng if available */}
             {(latitude !== null || longitude !== null) && (
-                <div className="mt-2 text-sm text-gray-700">
-                    <p>Latitude: {latitude}</p>
-                    <p>Longitude: {longitude}</p>
+                <div className="flex items-center space-x-4 text-sm *:text-black *:text-opacity-70">
+                    <p>Latitude: {sLat}</p>
+                    <p>Longitude: {sLng}</p>
                 </div>
             )}
 
@@ -319,7 +325,12 @@ const ShowCamera = ({
     handleCancelCamera,
 }) => (
     <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-80 flex flex-col items-center justify-center z-50">
-        <video ref={videoRef} className="w-72 max-w-full" autoPlay playsInline />
+        <video
+            ref={videoRef}
+            className="w-72 max-w-full"
+            autoPlay
+            playsInline
+        />
         <canvas ref={canvasRef} className="hidden" />
         <div className="mt-4 flex gap-4">
             <button
@@ -341,7 +352,7 @@ const ShowCamera = ({
 //
 // ================ MAIN COMPONENT ================
 //
-export default function ImageUploade() {
+export default function ImageUploade({ open, setOpen }) {
     const fileInputRef = useRef(null);
 
     // Manage uploading and image state
@@ -388,7 +399,13 @@ export default function ImageUploade() {
         // 2) Upload
         const latToSend = latitude;
         const lngToSend = longitude;
-        await uploadToSupabase(file, setImageUrl, setUploading, latToSend, lngToSend);
+        await uploadToSupabase(
+            file,
+            setImageUrl,
+            setUploading,
+            latToSend,
+            lngToSend
+        );
     };
 
     return (
@@ -398,6 +415,8 @@ export default function ImageUploade() {
                     imageUrl={imageUrl}
                     latitude={latitude}
                     longitude={longitude}
+                    open={open}
+                    setOpen={setOpen}
                 />
             ) : (
                 <ImageIsUploading

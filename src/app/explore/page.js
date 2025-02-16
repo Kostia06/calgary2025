@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { CiLocationOn } from 'react-icons/ci';
 import Image from 'next/image';
 import { useGetPostsList } from '@/app/hooks/useGetPostsList';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Input } from '@/components/ui/input';
 import Link from 'next/link';
 
@@ -54,6 +54,31 @@ const getScrollY = () => {
     return scrollY;
 };
 
+const getVisible = (ref) => {
+    const [visible, setVisible] = useState(false);
+
+    useEffect(() => {
+        // create an observer
+        const observer = new IntersectionObserver(
+            // callback
+            ([entry]) => {
+                setVisible(entry.isIntersecting);
+            },
+            // options
+            { threshold: 0.1 }
+        );
+
+        // observe the element
+        if (ref.current) observer.observe(ref.current);
+
+        // cleanup
+        return () => {
+            if (ref.current) observer.unobserve(ref.current);
+        };
+    }, []);
+    return visible;
+};
+
 const Search = ({ search, setSearch }) => {
     const show = getScrollY();
     const showCss = !show ? '-translate-y-24' : 'translate-y-0';
@@ -81,8 +106,14 @@ const PostCard = ({ post }) => {
     const { imageUrl, lat, lng, title, description, upvotes } = post;
     const sLat = parseFloat(lat).toFixed(2);
     const sLng = parseFloat(lng).toFixed(2);
+    const ref = useRef(null);
+    const visible = getVisible(ref);
+    const visibleCss = visible ? 'opacity-100 scale-100' : 'scale-50 opacity-0';
     return (
-        <Card className="max-w-lg w-full mx-auto shadow-lg">
+        <Card
+            ref={ref}
+            className={`smooth-el max-w-lg w-full mx-auto shadow-lg ${visibleCss}`}
+        >
             <CardHeader>
                 <CardTitle className="text-s text-xl font-bold">
                     {title}
