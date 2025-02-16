@@ -50,6 +50,8 @@ def preprocess_image(image_path):
 
 def predict(image_path, top_k=5):
     """Runs inference and prints the top K predicted classes with confidence scores."""
+    results = {}
+
     image = preprocess_image(image_path)
 
     if image is None:
@@ -65,10 +67,15 @@ def predict(image_path, top_k=5):
         class_index = sorted_indices[i]
         confidence = predictions[class_index] * 100
         predicted_class = CLASS_NAMES[class_index]
-        print(f"{predicted_class}, {confidence:.2f}%")
+        # print(f"{predicted_class}, {confidence:.2f}%")
+        if i == 0:
+            results["output"] = f"{predicted_class}, {confidence:.2f}%"
+
+    return results
 
 
 # Example Usage
-if __name__ == "__main__":
-    if len(sys.argv) > 1:
-        predict(sys.argv[1])
+# if __name__ == "__main__":
+#     if len(sys.argv) > 1:
+#         results = predict(sys.argv[1])
+        

@@ -1,6 +1,7 @@
 import flask
 import requests
 import subprocess
+import modelRunner
 
 app = flask(__name__)
 
@@ -22,9 +23,10 @@ def process_image():
     else:
         return jsonify({'error': 'Failed to download image'}), 500
 
-    result = subprocess.run(['python', 'modelRunner.py', image_path], capture_output=True, text=True)
+    result = modelRunner.predict(image_path)
 
-    return jsonify({'output': result.stdout.strip()})
+    #returns a dictionary
+    return result
 
 
 
