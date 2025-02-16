@@ -22,16 +22,13 @@ export default function CreatePost() {
                     <BsCamera2 />
                 </div>
             </DialogTrigger>
-            <DialogContent className="w-full h-4/5 bg-a border-p">
+            <DialogContent className="w-full h-4/5 bg-a flex flex-col items-center justify-evenly outline-none border-none">
                 <DialogHeader>
                     <DialogTitle className="text-4xl text-s text-center">
                         Create Post
                     </DialogTitle>
                 </DialogHeader>
-                <div className="w-full h-full flex items-center justify-center">
-                    <ImageUploader />
-                </div>
-                <DialogFooter></DialogFooter>
+                <ImageUploader />
             </DialogContent>
         </Dialog>
     );
