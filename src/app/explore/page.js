@@ -27,9 +27,7 @@ export default function Map() {
             {posts?.map((post) => (
                 <PostCard key={post.id} post={post} />
             ))}
-            <div className="fixed bottom-20 right-0 m-5">
-                <CreatePost />
-            </div>
+
             <Search search={search} setSearch={setSearch} />
         </div>
     );
@@ -98,12 +96,16 @@ const Search = ({ search, setSearch }) => {
                     boxShadow: 'none',
                 }}
             />
+
+            <button className="*:hover:scale-100 *:hover:shadow-none">
+                <CreatePost />
+            </button>
         </div>
     );
 };
 
 const PostCard = ({ post }) => {
-    const { imageUrl, lat, lng, title, description, upvotes } = post;
+    const { imageUrl, lat, lng, title, description, upvotes, id } = post;
     const sLat = parseFloat(lat).toFixed(2);
     const sLng = parseFloat(lng).toFixed(2);
     const ref = useRef(null);
@@ -113,28 +115,49 @@ const PostCard = ({ post }) => {
     const handleUpvote = async (e) => {
         e.preventDefault();
         try {
+            console.log('Upvoting post:', id);
             const response = await fetch('/api/posts/make-vote', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ id: post.id }),
+                body: JSON.stringify({ postId: id, action: 1 }),
             });
 
+            const data = await response.json();
+
+            console.log(data);
+
+            if (!response.ok) {
+                throw new Error(data.error || 'Failed to vote');
+            }
+        } catch (error) {
+            console.error('Error voting:', error);
+            alert(error.message);
+        }
+    };
+
+    const handleDownvote = async (e) => {
+        e.preventDefault();
+        try {
+            const response = await fetch('/api/posts/make-vote', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ postId: post.id, action: -1 }),
+            });
             const data = await response.json();
 
             if (!response.ok) {
                 throw new Error(data.error || 'Failed to vote');
             }
-
-            // Optionally refresh the page or update the UI
-            window.location.reload();
         } catch (error) {
             console.error('Error voting:', error);
-            // Optionally show error to user
             alert(error.message);
         }
     };
+
     return (
         <Card
             ref={ref}
@@ -178,7 +201,10 @@ const PostCard = ({ post }) => {
                     >
                         Upvote
                     </Button>
-                    <Button className="w-full bg-p duration-300 ease-in-out transition-all hover:bg-s hover:scale-110 hover:shadow-md hover:shadow-black">
+                    <Button
+                        onClick={(e) => handleDownvote(e)}
+                        className="w-full bg-p duration-300 ease-in-out transition-all hover:bg-s hover:scale-110 hover:shadow-md hover:shadow-black"
+                    >
                         Downvote
                     </Button>
                 </div>
