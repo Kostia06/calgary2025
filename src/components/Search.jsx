@@ -19,6 +19,8 @@ export default function Search({ search, setSearch }) {
                 'Content-Type': 'application/json',
             },
         })
+        const posts = await searchItem.json()
+        console.log(posts)
     }
     return (
         <div
