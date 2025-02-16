@@ -17,7 +17,7 @@ mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
 const Map = ({
     lng = -114.1371633,
     lat = 52.0761024,
-    zoom = 15
+    zoom = 10
 }) => {
     const mapContainer = useRef(null);
     const { points } = useGlobalContext();
@@ -31,7 +31,7 @@ const Map = ({
         INFLUENCER: 'https://uonrhmkvkrnumclopiim.supabase.co/storage/v1/object/public/posts//influencer.png'
     };
 
-    const getPostById = async(id) => {
+    const getPostById = async (id) => {
         const post = await fetch('/api/posts/get-post-by-id', {
             method: "POST",
             body: JSON.stringify({ id }),
@@ -52,8 +52,8 @@ const Map = ({
             style: 'mapbox://styles/mapbox/satellite-streets-v12',
             center: [lng, lat],
             zoom: zoom,
-            pitch: 60,
-            bearing: -45,
+            // pitch: 60,
+            // bearing: -45,
             antialias: true
         });
 
@@ -154,26 +154,42 @@ const Map = ({
         <>
             <div ref={mapContainer} className="w-full h-full" />
             {selectedPost !== null && (
-                    <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-80 z-50 flex items-center justify-center flex-col p-4">
-                        <div className="relative p-4 bg-white rounded-lg">
+                <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-80 z-50 flex items-center justify-center flex-col p-4">
+                    <div className="relative p-4 bg-white rounded-lg">
+                        {selectedPost.videoUrl && (
+                            <iframe
+                                className='w-full'
+                                width="315"
+                                height="560"
+                                src={`https://www.youtube.com/embed/${selectedPost.videoUrl.split('/').pop()}?autoplay=0`}
+                                title="YouTube Shorts video"
+                                frameBorder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                allowFullScreen
+                            />
+                        )}
+                        {selectedPost.imageUrl && (
                             <img
                                 src={selectedPost.imageUrl}
                                 alt="Uploaded"
                                 className="max-w-full max-h-full object-contain rounded-lg"
                             />
-                            <button
-                                onClick={closeModal}
-                                className="absolute top-1 right-2 bg-white text-black rounded-full hover:bg-gray-300"
-                            >
-                                <MdClose className="h-6 w-6 text-black fill-black" />
-                            </button>
+                        )}
+                        <button
+                            onClick={closeModal}
+                            className="absolute top-1 right-2 bg-white text-black rounded-full hover:bg-gray-300"
+                        >
+                            <MdClose className="h-6 w-6 text-black fill-black" />
+                        </button>
                         <div className='flex items-start gap-4 flex-col'>
                             <CardTitle className='text-2xl text-black'>{selectedPost.title}</CardTitle>
                             <CardTitle className='text-black'>{selectedPost.description}</CardTitle>
-                            <CardTitle className='text-white bg-s p-2 rounded-md'>{selectedPost.tags}</CardTitle>
-                        </div>
+                            {selectedPost.tags.length > 0 && (
+                                <CardTitle className='text-white bg-s p-2 rounded-md'>{selectedPost.tags}</CardTitle>
+                            )}
                         </div>
                     </div>
+                </div>
             )}
         </>
     )
