@@ -21,14 +21,9 @@ model User {
   createdAt  DateTime @default(now())
   updatedAt  DateTime @default(now()) @updatedAt
   fullname   String
-<<<<<<< HEAD
-  userType   UserType @default(USER)
-  Posts      Posts[]
-=======
   createdPosts Posts[]
   userType   UserType   @default(USER)
   votes      Vote[]
->>>>>>> d95edb8482251d3682a788c17f5612c4d38429d8
 }
 
 model Posts {
@@ -43,15 +38,6 @@ model Posts {
   lat         String
   lng         String
   tags        String[] @default([])
-<<<<<<< HEAD
-  user        User     @relation(fields: [userId], references: [id])
-}
-
-enum UserType {
-  USER
-  ADMIN
-  INFLUENCER
-=======
   votes       Vote[]
   user        User     @relation(fields: [userId], references: [id])
 }
@@ -64,5 +50,4 @@ model Vote {
   createdAt DateTime @default(now())
 
   @@id([userId, postId])
->>>>>>> d95edb8482251d3682a788c17f5612c4d38429d8
 }

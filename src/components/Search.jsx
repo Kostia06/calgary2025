@@ -6,10 +6,7 @@ import { Input } from '@/components/ui/input';
 export default function Search({ search, setSearch }) {
     const [show, setShow] = useState(false);
     const size = show ? 'w-80' : 'w-14';
-<<<<<<< HEAD
-=======
-
-    const handleSubmit = async(e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         const searchItem = await fetch('/api/search/search-animals', {
             method: 'POST',
@@ -19,11 +16,10 @@ export default function Search({ search, setSearch }) {
             headers: {
                 'Content-Type': 'application/json',
             },
-        })
-        const posts = await searchItem.json()
-        console.log(posts)
-    }
->>>>>>> d95edb8482251d3682a788c17f5612c4d38429d8
+        });
+        const posts = await searchItem.json();
+        console.log(posts);
+    };
     return (
         <div
             className={`flex bg-s bg-opacity-60 smooth items-center  h-14 rounded-full  ${size}`}
