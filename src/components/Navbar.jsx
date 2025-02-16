@@ -2,7 +2,7 @@
 
 import { CiMap } from 'react-icons/ci';
 import { CiCompass1 } from 'react-icons/ci';
-import { CiSettings } from 'react-icons/ci';
+import { CiUser } from 'react-icons/ci';
 import { usePathname } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
@@ -10,7 +10,7 @@ import Link from 'next/link';
 const links = [
     { name: 'explore', href: '/explore', icon: <CiCompass1 /> },
     { name: 'map', href: '/map', icon: <CiMap /> },
-    { name: 'profile', href: '/profile', icon: <CiSettings /> },
+    { name: 'profile', href: '/profile', icon: <CiUser /> },
 ];
 
 export default function NavBar() {
