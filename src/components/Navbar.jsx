@@ -6,10 +6,11 @@ import { CiUser } from 'react-icons/ci';
 import { usePathname } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Logo from '@/components/logo';
 
 const links = [
     { name: 'explore', href: '/explore', icon: <CiCompass1 /> },
-    { name: 'map', href: '/map', icon: <CiMap /> },
+    { name: 'map', href: '/map', icon: <Logo /> },
     { name: 'profile', href: '/profile', icon: <CiUser /> },
 ];
 
