@@ -18,7 +18,7 @@ export default function Profile() {
   const imageUrl = "https://www.nicepng.com/png/full/27-277590_nyan-cat-png-images-what-is-nyan-cat.png";
 
   return (
-    <ProfileCard/>
+    <ProfileCard />
   )
 }
 
