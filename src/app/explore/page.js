@@ -6,11 +6,13 @@ import { Button } from '@/components/ui/button';
 import { CiLocationOn } from 'react-icons/ci';
 import Image from 'next/image';
 import { useGetPostsList } from '@/app/hooks/useGetPostsList';
-
+import { useState, useEffect } from 'react';
+import { Input } from '@/components/ui/input';
 import Link from 'next/link';
 
 export default function Map() {
     const { posts, isLoading, error } = useGetPostsList();
+    const [search, setSearch] = useState('');
 
     if (isLoading) {
         return <div>Loading posts...</div>;
@@ -28,9 +30,49 @@ export default function Map() {
             <div className="fixed bottom-20 right-0 m-5">
                 <CreatePost />
             </div>
+            <Search search={search} setSearch={setSearch} />
         </div>
     );
 }
+
+const getScrollY = () => {
+    const [scrollY, setScrollY] = useState(true);
+    const [prevScrollY, setPrevScrollY] = useState(0);
+    // handle scroll event
+    const handleScroll = () => {
+        const currentScrollY = window.scrollY;
+        setScrollY(prevScrollY - currentScrollY > 0);
+        setPrevScrollY(currentScrollY);
+    };
+    // event listener
+    useEffect(() => {
+        window.addEventListener('scroll', handleScroll);
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+        };
+    }, [prevScrollY]);
+    return scrollY;
+};
+
+const Search = ({ search, setSearch }) => {
+    const show = getScrollY();
+    return (
+        <div className="absolute top-5 p-2 left-1/2 -translate-x-1/2 bg-s w-80 h-14 rounded-full flex items-center justify-center">
+            <Input
+                type="text"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="Search..."
+                className="bg-transparent w-full text-lg outline-none border-none focus:outline-none focus:ring-0 focus:border-none placeholder-[#e2e8ce] text-[#e2e8ce] placeholder:text-[#e2e8ce]"
+                style={{
+                    outline: 'none',
+                    border: 'none',
+                    boxShadow: 'none',
+                }}
+            />
+        </div>
+    );
+};
 
 const PostCard = ({ post }) => {
     const { imageUrl, lat, lng, title, description, upvotes } = post;
