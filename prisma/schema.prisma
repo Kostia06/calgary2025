@@ -21,6 +21,7 @@ model User {
 
 model Posts {
   id          String   @id @default(uuid()) @db.Uuid
+  imageUrl    String
   lat         String
   lng         String
   title       String
@@ -28,5 +29,6 @@ model Posts {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @default(now()) @updatedAt
   userId      String   @db.Uuid
+  upvotes     Int      @default(0)
   user        User     @relation(fields: [userId], references: [id])
 }
