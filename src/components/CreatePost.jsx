@@ -15,7 +15,7 @@ export default function CreatePost() {
     return (
         <Dialog>
             <DialogTrigger asChild>
-                <div className="bg-s sm:p-4 sm:text-3xl p-3 text-2xl rounded-full smooth-link *:stroke-[0.3] text-center hover:scale-110 hover:shadow-md hover:shadow-black">
+                <div className="bg-s w-14 h-14 flex items-center justify-center text-2xl rounded-full smooth-link *:stroke-[0.3] text-center hover:scale-110 hover:shadow-md hover:shadow-black">
                     <BsCamera2 />
                 </div>
             </DialogTrigger>
