@@ -53,7 +53,7 @@ def get_location_image(query):
         image_url = data["photos"][0]["src"]["large"]
         img_response = requests.get(image_url)
         img = Image.open(BytesIO(img_response.content))
-        return img
+        return img, image_url
     return None
 
 def get_wikipedia_summary(location):
@@ -73,17 +73,18 @@ def get_wikipedia_summary(location):
         return article_text if article_text else "No information found."
     return "No information found."
 
-def get_location_info(location):
+def get_location_info(location, request_host_url):
 
     coords = get_location(location)
-    image = get_location_image(location)
-    image.save("./image.jpg")
+    image, image_url = get_location_image(location)
+    image.save("./uploads/image.jpg")
     info = get_wikipedia_summary(location)
     summary = summarize_text(info)
     
     result = {
         "location": location,
         "coordinates": coords,
+        "image": image_url,
         "summary": summary
     }
     

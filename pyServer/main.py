@@ -1,9 +1,23 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory
+from flask_cors import CORS
 import requests
 from AI import modelRunner
 from Webscrapper import scrapper
+import os
 
 app = Flask(__name__)
+CORS(app)  # Enable CORS for all routes and origins
+
+def get_ngrok_url():
+    """Fetch the public Ngrok URL if Ngrok is running."""
+    try:
+        response = requests.get("http://localhost:4040/api/tunnels")
+        response.raise_for_status()
+        tunnels = response.json().get("tunnels", [])
+        if tunnels:
+            return tunnels[0]["public_url"]  # First tunnel is usually the correct one
+    except requests.RequestException:
+        return None  # Ngrok is not running or unavailable
 
 @app.route('/test')
 def test():
@@ -45,8 +59,14 @@ def webscrape_location():
     if not location:
         return jsonify({'error': 'No location provided'}), 400
 
-    result = scrapper.get_location_info(location)
+    result = scrapper.get_location_info(location, get_ngrok_url())
     return jsonify(result)
+
+
+@app.route('/uploads/<filename>', methods=['GET'])
+def return_img(filename):
+    UPLOAD_FOLDER = os.path.join(os.getcwd(), 'uploads')
+    return send_from_directory(UPLOAD_FOLDER, filename)
 
 if __name__ == '__main__':
     app.run(debug=True)
