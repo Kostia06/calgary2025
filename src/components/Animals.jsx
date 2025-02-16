@@ -8,14 +8,18 @@ export default function Animals() {
             <Image
                 src={parrot}
                 alt="Parrot"
-                objectFit="cover"
-                className="fixed -z-10 scale-90 -top-11 -left-24"
+                layout="fixed"
+                width={500}
+                height={500}
+                className="fixed -z-10 -top-11 -left-28"
             />
             <Image
                 src={sloth}
                 alt="Sloth"
-                objectFit="cover"
-                className="fixed z-20 scale-90 -top-11 -right-28"
+                layout="fixed"
+                width={500}
+                height={500}
+                className="fixed z-20 scale-90 -top-11 -right-32"
             />
         </>
     );
