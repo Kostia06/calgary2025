@@ -50,7 +50,7 @@ function ProfileCard() {
   const [profile, setProfile] = useState({
     name: "",
     email: "",
-    pfp: "",
+    pfp: cheetah,
     bio: "",
   });
 
