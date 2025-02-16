@@ -30,7 +30,6 @@ export default function RootLayout({ children }) {
                         <GlobalContextProvider>
                             {children}
                             <Navbar />
-                            <Animals />
                         </GlobalContextProvider>
                     </SignedIn>
                 </body>

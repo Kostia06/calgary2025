@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
@@ -13,21 +13,39 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import Background from '@/components/AnimatedBackground';
+import Animals from '@/components/Animals';
 
 export default function Profile() {
   const imageUrl = "https://www.nicepng.com/png/full/27-277590_nyan-cat-png-images-what-is-nyan-cat.png";
 
   return (
-    <ProfileCard />
+    <>
+      <ProfileCard />
+      <Animals />
+    </>
   )
 }
 
 function ProfileCard() {
+  
+
   const [profile, setProfile] = useState({
     name: "First Last",
     email: "example@email.ex",
     bio: "I love nature so much that nature loves me."
   });
+
+  const fetchUserProfile = async() => {
+    const userProfile = await fetch('/api/user/get-user-profile', {
+      method: "POST"
+    })
+    const user = await userProfile.json();
+    console.log(user, "USERRRR")
+  }
+
+  useEffect(() => {
+    fetchUserProfile();
+  }, [])
 
   const handleChange = (e) => {
     const { name, value } = e.target;
