@@ -26,6 +26,8 @@ def process_image():
     result = modelRunner.predict(image_path)
 
     #returns a dictionary
+    if result == {}:
+        return jsonify({'error': 'unable to run classification model, unknown error check terminal'}), 500
     return result
 
 
