@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
-import './Background.css';
+import './AnimatedBackground.css';
 
 const Background = ({ image, children }) => {
     const [cascadingImages, setCascadingImages] = useState([]);
@@ -13,11 +13,12 @@ const Background = ({ image, children }) => {
 
         const interval = setInterval(() => {
             const scale = Math.random() * 0.5 + 0.5; // Random scale between 0.5 and 1
+            const left = Math.random() * 100; // Random horizontal position between 0% and 100%
             setCascadingImages(prevImages => [
                 ...prevImages,
-                { src: image, scale }
+                { id: prevImages.length + 1, src: image, scale, left }
             ]);
-        }, 1000);
+        }, 3000); // Spawn less frequently (every 3 seconds)
 
         return () => clearInterval(interval);
     }, [image]);
@@ -31,7 +32,15 @@ const Background = ({ image, children }) => {
                     style={{
                         backgroundImage: `url(${img.src})`,
                         transform: `scale(${img.scale})`,
-                        animationDuration: `${Math.random() * 5 + 5}s` // Random duration between 5 and 10 seconds
+                        left: `${img.left}%`,
+                        animationDuration: `${Math.random() * 10 + 10}s`, // Slower travel (random duration between 10 and 20 seconds)
+                        position: 'absolute', // Ensure images are positioned independently
+                        top: 0, // Start from the top
+                        width: '100px', // Ensure the image is not cut off
+                        height: '100px', // Ensure the image is not cut off
+                        backgroundSize: 'contain', // Ensure the image is fully visible
+                        backgroundRepeat: 'no-repeat', // Ensure the image is not repeated
+                        animationTimingFunction: 'linear' // Ensure smooth animation
                     }}
                 />
             ))}

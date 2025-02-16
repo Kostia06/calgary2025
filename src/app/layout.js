@@ -9,6 +9,7 @@ import {
 import './globals.css';
 import { GlobalContextProvider } from '@/container/GlobalContext';
 import Navbar from '@/components/Navbar';
+import Animals from '@/components/Animals';
 
 export const metadata = {
     title: 'Create Next App',
