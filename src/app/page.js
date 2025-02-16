@@ -1,10 +1,11 @@
-import ImageUploader from "./components/Posts";
+'use client';
+import ImageUploader from './components/Posts';
 
 export default function Home() {
-  return (
-    <main>
-      <div>Hello world!</div>
-      <ImageUploader />
-    </main>
-  );
+    return (
+        <main>
+            <div>Hello world!</div>
+            <ImageUploader />
+        </main>
+    );
 }

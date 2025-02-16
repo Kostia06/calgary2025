@@ -16,29 +16,42 @@ const links = [
 export default function NavBar() {
     const pathname = usePathname();
     const showNavbar = useNavbarVisibilityOnScroll();
+    const [hoveredLink, setHoveredLink] = useState(null);
     const isHidden = true ? '' : 'translate-y-40';
     return (
         <div
             className={`fixed bottom-0 flex items-center justify-evenly border-t-2 w-screen smooth-link h-20 bg-p ${isHidden}`}
         >
             {links.map((link) => (
-                <LinkPage key={link.href} currentPath={pathname} link={link} />
+                <LinkPage
+                    key={link.href}
+                    currentPath={pathname}
+                    link={link}
+                    hoveredLink={hoveredLink}
+                    setHoveredLink={setHoveredLink}
+                />
             ))}
         </div>
     );
 }
 
-const LinkPage = ({ currentPath, link }) => {
+const LinkPage = ({ currentPath, link, hoveredLink, setHoveredLink }) => {
     const pathname = usePathname();
     const isActive = currentPath === link.href;
     const isActiveClass = isActive
-        ? '-translate-y-8 bg-s shadow-md shadow-black'
+        ? '-translate-y-8 bg-s rounded-full shadow-lg shadow-gray-900'
         : '';
+    // Handling the blur effect
+    const isHovered = hoveredLink === link.href;
+    const blurClass =
+        !isHovered && !isActive ? 'filter blur-sm opacity-50' : '';
     return (
         <Link
             key={link.href}
             href={link.href}
-            className={`relative p-4 text-4xl  rounded-full smooth-link *:stroke-[0.3] text-center ${isActiveClass} hover:scale-110 hover:shadow-md hover:shadow-black`}
+            className={`relative p-4 text-4xl smooth-link *:stroke-[0.3] text-center ${isActiveClass} hover:scale-110 ${blurrClass}`}
+            onMouseEnter={() => setHoveredLink(link.href)}
+            onMouseLeave={() => setHoveredLink(null)}
         >
             {link.icon}
         </Link>
