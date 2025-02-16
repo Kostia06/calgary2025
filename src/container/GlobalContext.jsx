@@ -1,5 +1,5 @@
-"use client";
-import { createContext, useContext, useState, useEffect } from "react";
+'use client';
+import { createContext, useContext, useState, useEffect } from 'react';
 
 const GlobalContext = createContext();
 
@@ -34,10 +34,10 @@ const useLocalState = (key, defaultValue) => {
 
 export const GlobalContextProvider = ({ children }) => {
     // Global States
-    const data = useLocalState("data", {
-        name: "John Doe",
+    const data = useLocalState('data', {
+        name: 'John Doe',
         age: 25,
-        email: "",
+        email: '',
     });
 
     // Return the global variables in this wrapper
@@ -52,7 +52,7 @@ export const useGlobalContext = () => {
     const context = useContext(GlobalContext);
     if (!context) {
         throw new Error(
-            "useGlobalContext must be used within a GlobalContextProvider",
+            'useGlobalContext must be used within a GlobalContextProvider'
         );
     }
     return context;
