@@ -1,0 +1,31 @@
+.background-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.cascading-image {
+    position: absolute;
+    top: -100px; /* Start above the viewport */
+    left: 50%;
+    width: 100px;
+    height: 100px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    animation: flowDown linear infinite;
+}
+
+@keyframes flowDown {
+    0% {
+        transform: translateY(0);
+    }
+    100% {
+        transform: translateY(110vh); /* Move beyond the viewport */
+    }
+}
+
+.background-children {
+    position: relative;
+    z-index: 1;
+}
