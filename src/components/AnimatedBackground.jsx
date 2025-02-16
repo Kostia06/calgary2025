@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
-import './Background.css';
+import './AnimatedBackground.css';
 
 const Background = ({ image, children }) => {
     const [cascadingImages, setCascadingImages] = useState([]);
