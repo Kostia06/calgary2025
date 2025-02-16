@@ -12,7 +12,23 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { Circle } from 'lucide-react';
+import Background from '@/components/Background';
+
+// export default function Profile() {
+//   const imageUrl = "https://www.nicepng.com/png/full/27-277590_nyan-cat-png-images-what-is-nyan-cat.png";
+
+//   return (
+//     <div className="w-screen h-screen flex-col place-content-center place-items-center *:bg-transparent">
+//       <img src={imageUrl} alt="Nyan Cat" />
+//       <Background image={imageUrl}>
+//         <h1>What is up brother!</h1>
+//         <p>
+//           This is just a silly little test.
+//         </p>
+//       </Background>
+//     </div>
+//   )
+// }
 
 export default function Profile() {
   const [profile, setProfile] = useState({
