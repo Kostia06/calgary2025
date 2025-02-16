@@ -1,4 +1,4 @@
-import ImageUploader from '@/app/components/Posts';
+import ImageUploader from '@/components/ImageUploader';
 import {
     Dialog,
     DialogContent,
@@ -14,20 +14,18 @@ import { BsCamera2 } from 'react-icons/bs';
 export default function CreatePost() {
     return (
         <Dialog>
-            <DialogTrigger
-                asChild
-                className="fixed bottom-20 right-0 sm:m-5 m-3"
-            >
-                <div className="bg-s sm:p-4 sm:text-3xl p-3 text-2xl rounded-full smooth-link *:stroke-[0.3] text-center hover:scale-110 hover:shadow-md hover:shadow-black">
+            <DialogTrigger asChild>
+                <div className="bg-s w-14 h-14 flex items-center justify-center text-2xl rounded-full smooth-link *:stroke-[0.3] text-center hover:scale-110 hover:shadow-md hover:shadow-black">
                     <BsCamera2 />
                 </div>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[425px] flex items-center justify-center">
+            <DialogContent className="w-full h-4/5 bg-a flex flex-col items-center justify-evenly outline-none border-none">
                 <DialogHeader>
-                    <DialogTitle className="text-2xl text-center">Create Post</DialogTitle>
-                    <ImageUploader />
+                    <DialogTitle className="text-4xl text-s text-center">
+                        Create Post
+                    </DialogTitle>
                 </DialogHeader>
-                <DialogFooter></DialogFooter>
+                <ImageUploader />
             </DialogContent>
         </Dialog>
     );
