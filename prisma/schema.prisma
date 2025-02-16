@@ -9,26 +9,25 @@ datasource db {
 
 model User {
   id         String   @id @default(uuid()) @db.Uuid
-  clerk_id   String   @unique
   email      String   @unique
-  fullname   String
   avatar_url String
+  clerk_id   String   @unique
   createdAt  DateTime @default(now())
   updatedAt  DateTime @default(now()) @updatedAt
-
-  Posts Posts[]
+  fullname   String
+  Posts      Posts[]
 }
 
 model Posts {
   id          String   @id @default(uuid()) @db.Uuid
   imageUrl    String
-  lat         String
-  lng         String
   title       String
   description String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @default(now()) @updatedAt
   userId      String   @db.Uuid
   upvotes     Int      @default(0)
+  lat         String
+  lng         String
   user        User     @relation(fields: [userId], references: [id])
 }
