@@ -7,7 +7,7 @@ export default function QuickOptions() {
 
     return (
         <div className="fixed top-0 left-0 m-4 flex flex-col items-start justify-center space-y-4">
-            <Search search={search} setSearch={setSearch}/>
+            <Search search={search} setSearch={setSearch} />
             <CreatePost search={search} setSearch={setSearch} />
         </div>
     );
