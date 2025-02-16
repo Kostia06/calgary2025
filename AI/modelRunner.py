@@ -1,17 +1,34 @@
+import os
+os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
+os.environ["TF_CPP_MIN_LOG_LEVEL"] = "3"
 import tensorflow as tf
 import numpy as np
 import cv2
-import os
+import sys
 
 # Constants
-MODEL_PATH = "./models/cnn_model(4).h5"
+MODEL_PATH = "./cnn_model(4).h5"
 IMAGE_SIZE = (128, 128)  # Match your training size
 
 # Load the trained model
 model = tf.keras.models.load_model(MODEL_PATH)
 
 # Get class names (from training dataset)
-CLASS_NAMES = sorted(os.listdir("./training_data"))  # Ensure same order as training
+CLASS_NAMES = ['badger', 'bald_eagle', 'bat', 'bear', 'bee', 'beetle',
+                'bighorn_sheep', 'bison', 'black_bear', 'boar', 'brown_bear',
+                'burrowing_owl', 'butterfly', 'canada_goose_bird', 'caribou', 
+                'cat', 'caterpillar', 'chimpanzee', 'cockroach', 'cougar', 'cow', 
+                'coyote', 'crab', 'crow', 'deer', 'dog', 'dolphin', 'donkey', 
+                'dragonfly', 'duck', 'eagle', 'elephant', 'elk', 'flamingo', 'fly', 
+                'fox', 'goat', 'golden_eagle', 'goldfish', 'goose', 'gorilla', 'grasshopper', 
+                'great_horned_owl', 'hamster', 'hare', 'hedgehog', 'hippopotamus', 'hornbill', 'horse', 
+                'hummingbird', 'hyena', 'jellyfish', 'kangaroo', 'koala', 'ladybugs', 'leopard', 
+                'lion', 'lizard', 'lobster', 'lynx', 'moose', 'mosquito', 'moth', 'mountain_goat', 
+                'mouse', 'mule_deer', 'octopus', 'okapi', 'orangutan', 'otter', 'owl', 'ox', 'oyster', 
+                'panda', 'parrot', 'pelecaniformes', 'penguin', 'pig', 'pigeon', 'pine_marten', 'porcupine', 
+                'possum', 'raccoon', 'rat', 'reindeer', 'rhinoceros', 'river_otter', 'sandpiper', 'seahorse', 'seal', 
+                'shark', 'sheep', 'snake', 'snow_goose', 'sparrow', 'squid', 'squirrel', 'starfish', 'swan', 
+                'tiger', 'turkey', 'turtle', 'whale', 'white_tail_deer', 'wolf', 'wombat', 'woodpecker', 'zebra']
 
 def preprocess_image(image_path):
     """Loads and preprocesses an image for the model."""
@@ -44,12 +61,11 @@ def predict(image_path, top_k=5):
     # Get the indices sorted by confidence (highest first)
     sorted_indices = np.argsort(predictions)[::-1]
 
-    print("\nPredictions (Sorted by Confidence):")
     for i in range(min(top_k, len(CLASS_NAMES))):
         class_index = sorted_indices[i]
         confidence = predictions[class_index] * 100
         predicted_class = CLASS_NAMES[class_index]
-        print(f"{i+1}, {predicted_class}, {confidence:.2f}%")
+        print(f"{predicted_class}, {confidence:.2f}%")
 
 
 # Example Usage
