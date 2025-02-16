@@ -12,6 +12,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+import { Circle } from 'lucide-react';
 
 export default function Profile() {
   const [profile, setProfile] = useState({
@@ -41,8 +42,8 @@ export default function Profile() {
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="">
-              <div>
+            <div className="flex">
+              <div className="flex-col w-1/2 space-y-4">
                 <div>
                   <label className="font-medium text-p">Name</label>
                   <Input
@@ -64,7 +65,9 @@ export default function Profile() {
                   />
                 </div>
               </div>
-              <img></img>
+              <div className="flex w-1/2 place-content-center place-items-center">
+                <div className="w-24 h-24 rounded-full bg-s" />
+              </div>
             </div>
             <div>
               <label className="font-medium text-p">Bio</label>
