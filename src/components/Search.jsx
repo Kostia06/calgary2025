@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { CiSearch } from 'react-icons/ci';
 import { Input } from '@/components/ui/input';
 
-export default function Search({ saerch, setSearch }) {
+export default function Search({ search, setSearch }) {
     const [show, setShow] = useState(false);
     const size = show ? 'w-80' : 'w-14';
     return (
