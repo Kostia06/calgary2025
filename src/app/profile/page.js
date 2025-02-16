@@ -35,7 +35,7 @@ export default function Profile() {
     };
     return (
         <div className="w-screen h-screen flex justify-center items-center pb-20">
-            <Card className="bg-white">
+            <Card className="w-10/12 sm:w-9/12 md:w-7/12 lg:w-5/12 bg-white">
                 <CardHeader>
                     <h1 className="text-2xl font-bold text-p">User Profile</h1>
                 </CardHeader>
