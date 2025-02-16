@@ -1,142 +1,183 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { useGlobalContext } from '@/container/GlobalContext';
+import { Dialog, DialogContent } from '@radix-ui/react-dialog';
+import { MdClose } from 'react-icons/md';
+import { PostCard } from '@/app/explore/page';
+import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
+import Link from 'next/link';
+import { CiLocationArrow1 } from 'react-icons/ci';
+import { Button } from './ui/button';
 
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
 
 const Map = ({
-  lng = -114.1371633,
-  lat = 52.0761024,
-  zoom = 15,
-//   points = [
-//     { lng: -114.1371633, lat: 52.0761024, userType: 'USER' },
-//     { lng: -114.137177, lat: 51.075284,   userType: 'USER' },
-//     { lng: -114.137177, lat: 52.075284,   userType: 'ADMIN' },
-//     { lng: -114.137177, lat: 52.175284,   userType: 'INFLUENCER' }
-//   ]
+    lng = -114.1371633,
+    lat = 52.0761024,
+    zoom = 15
 }) => {
-  const mapContainer = useRef(null);
-  const {points} = useGlobalContext();
+    const mapContainer = useRef(null);
+    const { points } = useGlobalContext();
+    const [selectedId, setSelectedId] = useState(null);
+    const [selectedPost, setSelectedPost] = useState(null);
 
-  // 1) A lookup table of images by userType
-  //    Swap in any URLs you’d like.
-  const userTypeImages = {
-    USER: 'https://media.discordapp.net/attachments/1340456650821337131/1340661092665524295/Community_Pin_png.png?ex=67b32b70&is=67b1d9f0&hm=afd05915c0105a1b7c28bc51fcbfbef77d36ddedda0bf308c11a72c400120017&=&format=webp&quality=lossless&width=899&height=899',
-    ADMIN: 'https://media.discordapp.net/attachments/1340456650821337131/1340661185540001872/Educational_Pin_.png?ex=67b32b86&is=67b1da06&hm=aac26d3440a56541d0ba17858466c630b485fb6c264364f2b162b7e3479dcb09&=&format=webp&quality=lossless&width=899&height=899',
-    INFLUENCER: 'https://media.discordapp.net/attachments/1340456650821337131/1340661295636021410/Influencer_Pin_png.png?ex=67b32ba1&is=67b1da21&hm=ad3fb39c2b3bc53ece0848a3cf94a56e3735090b55e8cc12895a66502a225805&=&format=webp&quality=lossless&width=899&height=899'
-  };
-  
-  useEffect(() => {
-    if (!mapContainer.current) return;
-
-    console.log('Points to be rendered:', points); // Debug log
-
-    const map = new mapboxgl.Map({
-      container: mapContainer.current,
-      style: 'mapbox://styles/mapbox/satellite-streets-v12',
-      center: [lng, lat],
-      zoom: zoom,
-      pitch: 60,
-      bearing: -45,
-      antialias: true
-    });
-
-    // 2) Marker helper that picks the correct image based on userType
-    const addMarkerWithImage = (mapInstance, markerLng, markerLat, userType) => {
-      console.log('Adding marker at:', markerLng, markerLat, userType);
-      
-      // Default/fallback image if userType not found
-      const imageUrl = userTypeImages[userType] || 'https://via.placeholder.com/50';
-
-      const el = document.createElement('div');
-      el.className = 'marker';
-      el.style.width = '50px';
-      el.style.height = '50px';
-      el.style.borderRadius = '50%';
-      el.style.cursor = 'pointer';
-      el.style.boxShadow = '0 0 10px rgba(0,0,0,0.5)';
-
-      // Apply the per-userType image here
-      el.style.backgroundImage = `url(${imageUrl})`;
-      el.style.backgroundSize = 'cover';
-      el.style.backgroundRepeat = 'no-repeat';
-      el.style.backgroundPosition = 'center';
-
-      new mapboxgl.Marker({
-        element: el,
-        pitchAlignment: 'map',
-        rotationAlignment: 'map'
-      })
-        .setLngLat([markerLng, markerLat])
-        .addTo(mapInstance);
+    // 1) A lookup table of images by userType
+    const userTypeImages = {
+        USER: 'https://uonrhmkvkrnumclopiim.supabase.co/storage/v1/object/public/posts//community.png',
+        ADMIN: 'https://uonrhmkvkrnumclopiim.supabase.co/storage/v1/object/public/posts//admins.png',
+        INFLUENCER: 'https://uonrhmkvkrnumclopiim.supabase.co/storage/v1/object/public/posts//influencer.png'
     };
 
-    map.on('load', () => {
-      // Add a DEM (Digital Elevation Model) for 3D terrain
-      map.addSource('mapbox-dem', {
-        'type': 'raster-dem',
-        'url': 'mapbox://mapbox.mapbox-terrain-dem-v1',
-        'tileSize': 512,
-        'maxzoom': 14
-      });
-      map.setTerrain({ 'source': 'mapbox-dem', 'exaggeration': 1.5 });
+    const getPostById = async(id) => {
+        const post = await fetch('/api/posts/get-post-by-id', {
+            method: "POST",
+            body: JSON.stringify({ id }),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        const data = await post.json()
+        setSelectedPost(data.post);
+    }
 
-      // Add 3D building layer
-      map.addLayer({
-        'id': '3d-buildings',
-        'source': 'composite',
-        'source-layer': 'building',
-        'filter': ['==', 'extrude', 'true'],
-        'type': 'fill-extrusion',
-        'minzoom': 15,
-        'paint': {
-          'fill-extrusion-color': '#aaa',
-          'fill-extrusion-height': [
-            'interpolate', ['linear'], ['zoom'],
-            15, 0,
-            15.05, ['get', 'height']
-          ],
-          'fill-extrusion-base': [
-            'interpolate', ['linear'], ['zoom'],
-            15, 0,
-            15.05, ['get', 'min_height']
-          ],
-          'fill-extrusion-opacity': 0.6
-        }
-      });
 
-      // Set the fog/atmosphere
-      map.setFog({
-        'color': 'rgb(186, 210, 235)',
-        'high-color': 'rgb(36, 92, 223)',
-        'horizon-blend': 0.02,
-        'space-color': 'rgb(11, 11, 25)',
-        'star-intensity': 0.6
-      });
+    useEffect(() => {
+        if (!mapContainer.current) return;
 
-      console.log('Map loaded, adding points...');
-      points.forEach(point => {
-        // 3) Pass userType to the marker function
-        addMarkerWithImage(
-          map,
-          point.lng,
-          point.lat,
-          point.user.userType
-        );
-      });
-    });
+        const map = new mapboxgl.Map({
+            container: mapContainer.current,
+            style: 'mapbox://styles/mapbox/satellite-streets-v12',
+            center: [lng, lat],
+            zoom: zoom,
+            pitch: 60,
+            bearing: -45,
+            antialias: true
+        });
 
-    // Add navigation controls
-    map.addControl(new mapboxgl.NavigationControl({ visualizePitch: true }));
+        // 2) Marker helper that picks the correct image based on userType and handles click
+        const addMarkerWithImage = (mapInstance, point) => {
+            const { lng: markerLng, lat: markerLat, id, user } = point;
+            const userType = user?.userType ?? 'USER';
 
-    // Clean up on unmount
-    return () => map.remove();
-  }, [lng, lat, zoom, points]);
+            // Fallback image if userType not found
+            const imageUrl = userTypeImages[userType] || 'https://via.placeholder.com/50';
 
-  return <div ref={mapContainer} className="w-full h-full" />;
+            // Create a DOM element for the marker
+            const el = document.createElement('div');
+            el.className = 'marker';
+            el.style.width = '50px';
+            el.style.height = '50px';
+            el.style.borderRadius = '50%';
+            el.style.cursor = 'pointer';
+            el.style.boxShadow = '0 0 10px rgba(0,0,0,0.5)';
+            el.style.backgroundImage = `url(${imageUrl})`;
+            el.style.backgroundSize = 'cover';
+            el.style.backgroundRepeat = 'no-repeat';
+            el.style.backgroundPosition = 'center';
+
+            // Attach a click listener to print the point’s id
+            el.addEventListener('click', () => {
+                getPostById(id);
+            });
+
+            new mapboxgl.Marker({
+                element: el,
+                pitchAlignment: 'map',
+                rotationAlignment: 'map'
+            })
+                .setLngLat([markerLng, markerLat])
+                .addTo(mapInstance);
+        };
+
+        map.on('load', () => {
+            // Add a DEM (Digital Elevation Model) for 3D terrain
+            map.addSource('mapbox-dem', {
+                'type': 'raster-dem',
+                'url': 'mapbox://mapbox.mapbox-terrain-dem-v1',
+                'tileSize': 512,
+                'maxzoom': 14
+            });
+            map.setTerrain({ 'source': 'mapbox-dem', 'exaggeration': 1.5 });
+
+            // Add 3D building layer
+            map.addLayer({
+                'id': '3d-buildings',
+                'source': 'composite',
+                'source-layer': 'building',
+                'filter': ['==', 'extrude', 'true'],
+                'type': 'fill-extrusion',
+                'minzoom': 15,
+                'paint': {
+                    'fill-extrusion-color': '#aaa',
+                    'fill-extrusion-height': [
+                        'interpolate', ['linear'], ['zoom'],
+                        15, 0,
+                        15.05, ['get', 'height']
+                    ],
+                    'fill-extrusion-base': [
+                        'interpolate', ['linear'], ['zoom'],
+                        15, 0,
+                        15.05, ['get', 'min_height']
+                    ],
+                    'fill-extrusion-opacity': 0.6
+                }
+            });
+
+            // Set the fog/atmosphere
+            map.setFog({
+                'color': 'rgb(186, 210, 235)',
+                'high-color': 'rgb(36, 92, 223)',
+                'horizon-blend': 0.02,
+                'space-color': 'rgb(11, 11, 25)',
+                'star-intensity': 0.6
+            });
+
+            // 3) Add markers
+            points?.forEach((point) => addMarkerWithImage(map, point));
+        });
+
+        // Add navigation controls
+        map.addControl(new mapboxgl.NavigationControl({ visualizePitch: true }));
+
+        // Cleanup on unmount
+        return () => map.remove();
+    }, [lng, lat, zoom, points]);
+
+    const closeModal = () => {
+        setSelectedId(null);
+        setSelectedPost(null);
+    }
+    return (
+        <>
+            <div ref={mapContainer} className="w-full h-full" />
+            {selectedPost !== null && (
+                    <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-80 z-50 flex items-center justify-center flex-col p-4">
+                        <div className="relative p-4 bg-white rounded-lg">
+                            <img
+                                src={selectedPost.imageUrl}
+                                alt="Uploaded"
+                                className="max-w-full max-h-full object-contain rounded-lg"
+                            />
+                            <button
+                                onClick={closeModal}
+                                className="absolute top-1 right-2 bg-white text-black rounded-full hover:bg-gray-300"
+                            >
+                                <MdClose className="h-6 w-6 text-black fill-black" />
+                            </button>
+                        <div className='flex items-start gap-4 flex-col'>
+                            <CardTitle className='text-2xl text-black'>{selectedPost.title}</CardTitle>
+                            <CardTitle className='text-black'>{selectedPost.description}</CardTitle>
+                            <CardTitle className='text-white bg-s p-2 rounded-md'>{selectedPost.tags}</CardTitle>
+                        </div>
+                        </div>
+                    </div>
+            )}
+        </>
+    )
+
 };
 
 export default Map;

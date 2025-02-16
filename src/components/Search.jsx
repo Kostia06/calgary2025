@@ -26,6 +26,18 @@ export default function Search({ search, setSearch }) {
         setPoints(posts.posts);
     };
 
+    useEffect(() => {
+        const showAll = async() => {
+            const allPosts = await fetch('/api/search/search-all', {
+                method: 'POST',
+            })
+            const posts = await allPosts.json();
+            console.log(posts);
+            setPoints(posts.posts);
+        }
+        showAll();
+    }, []);
+
     return (
         <div
             className={`flex bg-s  smooth items-center  h-14 rounded-full bg-opacity-60 ${size}`}

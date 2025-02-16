@@ -18,7 +18,7 @@ export const POST = async (req) => {
     }
 
 
-    const getImageTags = await fetch('https://f69d-136-159-213-104.ngrok-free.app/process_image', {
+    const getImageTags = await fetch('https://b69f-136-159-213-104.ngrok-free.app/process_image', {
         method: 'POST',
         body: JSON.stringify({
             url: imageUrl,
