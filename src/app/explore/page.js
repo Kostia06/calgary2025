@@ -23,40 +23,7 @@ export default function Map() {
     return (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 p-6">
             {posts?.map((post) => (
-                <Card key={post.id} className="max-w-lg w-full mx-auto shadow-lg">
-                    <CardHeader>
-                        <CardTitle className="text-s text-xl font-bold">
-                            {post.title}
-                        </CardTitle>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                        {/* Post Image */}
-                        <div className="relative w-full h-64 rounded-lg overflow-hidden">
-                            <img
-                                src={post.imageUrl}
-                                alt={post.title}
-                                fill={true}
-                                className="object-cover"
-                            />
-                        </div>
-
-                        {/* Post Description */}
-                        <p className="text-s text-opacity-75">{post.description}</p>
-
-                        {/* Post Details */}
-                        <div className="flex justify-between text-sm text-muted-foreground">
-                            <span className="text-s text-opacity-75">
-                                📍 {post.lat}, {post.lng}
-                            </span>
-                            <span className="text-s text-opacity-75">
-                                👍 {post.upvotes}
-                            </span>
-                        </div>
-
-                        {/* Upvote Button */}
-                        <Button onClick={() => console.log(post)} className="w-full bg-p hover:bg-a">Upvote</Button>
-                    </CardContent>
-                </Card>
+                <PostCard key={post.id} post={post} />
             ))}
             <div className="fixed bottom-20 right-0 m-5">
                 <CreatePost />
