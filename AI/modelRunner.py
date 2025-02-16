@@ -54,5 +54,5 @@ def predict(image_path, top_k=5):
 
 # Example Usage
 if __name__ == "__main__":
-    test_image = "D:\Programming\Hackathon\calgary2025\AI\image.png"  # Change this to your image path
-    predict(test_image)
+    if len(sys.argv) > 1:
+        predict(sys.argv[1])
