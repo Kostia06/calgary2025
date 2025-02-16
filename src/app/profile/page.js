@@ -33,7 +33,6 @@ export default function Profile() {
         // Save the profile state
         console.log('Profile saved:', profile);
     };
-
     return (
         <div className="w-screen h-screen flex justify-center items-center pb-20">
             <Card className="bg-white">
