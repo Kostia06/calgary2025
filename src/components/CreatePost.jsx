@@ -1,3 +1,4 @@
+import ImageUploader from '@/app/components/Posts';
 import {
     Dialog,
     DialogContent,
@@ -21,10 +22,10 @@ export default function CreatePost() {
                     <BsCamera2 />
                 </div>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[425px]">
+            <DialogContent className="sm:max-w-[425px] flex items-center justify-center">
                 <DialogHeader>
-                    <DialogTitle>Create Post</DialogTitle>
-                    <DialogDescription></DialogDescription>
+                    <DialogTitle className="text-2xl text-center">Create Post</DialogTitle>
+                    <ImageUploader />
                 </DialogHeader>
                 <DialogFooter></DialogFooter>
             </DialogContent>
