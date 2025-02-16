@@ -49,7 +49,7 @@ def predict(image_path, top_k=5):
         class_index = sorted_indices[i]
         confidence = predictions[class_index] * 100
         predicted_class = CLASS_NAMES[class_index]
-        print(f"{i+1}. {predicted_class} - {confidence:.2f}%")
+        print(f"{i+1}, {predicted_class}, {confidence:.2f}%")
 
 
 # Example Usage
