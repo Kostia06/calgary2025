@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
@@ -12,29 +12,46 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import Background from '@/components/Background';
-
-// export default function Profile() {
-//   const imageUrl = "https://www.nicepng.com/png/full/27-277590_nyan-cat-png-images-what-is-nyan-cat.png";
-
-//   return (
-//     <div className="w-screen h-screen flex-col place-content-center place-items-center *:bg-transparent">
-//       <img src={imageUrl} alt="Nyan Cat" />
-//       <Background image={imageUrl}>
-//         <h1>What is up brother!</h1>
-//         <p>
-//           This is just a silly little test.
-//         </p>
-//       </Background>
-//     </div>
-//   )
-// }
+import Background from '@/components/AnimatedBackground';
+import Animals from '@/components/Animals';
+import cheetah from '@/public/assets/cheetah.png'
 
 export default function Profile() {
+  const imageUrl = "https://www.nicepng.com/png/full/27-277590_nyan-cat-png-images-what-is-nyan-cat.png";
+
+  return (
+    <>
+      <ProfileCard />
+      <Animals />
+    </>
+  )
+}
+
+function ProfileCard() {
+
+  const fetchUserProfile = async() => {
+    const userProfile = await fetch('/api/user/get-user-profile', {
+      method: "POST"
+    })
+    const user = await userProfile.json();
+    console.log(user, "USERRRR")
+    setProfile({
+      name: user.fullname || "John Doe",
+      email: user.email || "example@email.com",
+      pfp: user.avatar_url || cheetah,
+      bio: "I love nature so much that nature loves me."
+    });
+  };
+
+  useEffect(() => {
+    fetchUserProfile();
+  }, []);
+
   const [profile, setProfile] = useState({
-    name: "First Last",
-    email: "example@email.ex",
-    bio: "I love nature so much that nature loves me."
+    name: "",
+    email: "",
+    pfp: cheetah,
+    bio: "",
   });
 
   const handleChange = (e) => {
@@ -82,7 +99,12 @@ export default function Profile() {
                 </div>
               </div>
               <div className="flex w-1/2 place-content-center place-items-center">
-                <div className="w-24 h-24 rounded-full bg-s" />
+                <>
+                  <img
+                    src={profile.pfp}
+                    className="w-24 h-24 rounded-full bg-s"
+                  />
+                </>
               </div>
             </div>
             <div>
@@ -97,7 +119,7 @@ export default function Profile() {
           </form>
         </CardContent>
         <CardFooter className="justify-center">
-          <Button type="submit" className="bg-p text-white">Save</Button>
+          <Button type="submit" onClick={handleSubmit} className="bg-p text-white">Save</Button>
         </CardFooter>
       </Card>
     </div>

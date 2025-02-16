@@ -40,9 +40,11 @@ export const GlobalContextProvider = ({ children }) => {
         email: '',
     });
 
+    const [points, setPoints] = useState([]);
+
     // Return the global variables in this wrapper
     return (
-        <GlobalContext.Provider value={{ data }}>
+        <GlobalContext.Provider value={{ data, points, setPoints }}>
             {children}
         </GlobalContext.Provider>
     );

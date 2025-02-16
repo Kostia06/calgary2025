@@ -7,22 +7,17 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum UserType {
-  USER
-  ADMIN
-  INFLUENCER
-}
-
 model User {
-  id         String   @id @default(uuid()) @db.Uuid
-  email      String   @unique
-  avatar_url String
-  clerk_id   String   @unique
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @default(now()) @updatedAt
-  fullname   String
-  Posts      Posts[]
-  userType   UserType   @default(USER)
+  id           String   @id @default(uuid()) @db.Uuid
+  email        String   @unique
+  avatar_url   String
+  clerk_id     String   @unique
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @default(now()) @updatedAt
+  fullname     String
+  userType     UserType @default(USER)
+  createdPosts Posts[]
+  votes        Vote[]
 }
 
 model Posts {
@@ -38,4 +33,21 @@ model Posts {
   lng         String
   tags        String[] @default([])
   user        User     @relation(fields: [userId], references: [id])
+  votes       Vote[]
+}
+
+model Vote {
+  userId    String   @db.Uuid
+  postId    String   @db.Uuid
+  createdAt DateTime @default(now())
+  post      Posts    @relation(fields: [postId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
+
+  @@id([userId, postId])
+}
+
+enum UserType {
+  USER
+  ADMIN
+  INFLUENCER
 }

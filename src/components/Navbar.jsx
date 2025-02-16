@@ -6,10 +6,11 @@ import { CiUser } from 'react-icons/ci';
 import { usePathname } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Logo from '@/components/logo';
 
 const links = [
     { name: 'explore', href: '/explore', icon: <CiCompass1 /> },
-    { name: 'map', href: '/map', icon: <CiMap /> },
+    { name: 'map', href: '/map', icon: <Logo /> },
     { name: 'profile', href: '/profile', icon: <CiUser /> },
 ];
 
@@ -19,7 +20,7 @@ export default function NavBar() {
     const isHidden = true ? '' : 'translate-y-40';
     return (
         <div
-            className={`fixed bottom-0 flex items-center justify-evenly w-screen smooth-link h-20 bg-p ${isHidden}`}
+            className={`fixed bottom-0 left-1/2 -translate-x-1/2 flex items-center justify-evenly w-[21rem] smooth-link h-20 bg-p bg-opacity-90 rounded-t-3xl ${isHidden}`}
         >
             {links.map((link) => (
                 <LinkPage key={link.href} currentPath={pathname} link={link} />
