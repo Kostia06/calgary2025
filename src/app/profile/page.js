@@ -1,56 +1,83 @@
+"use client"
+
+import { useState } from 'react';
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+import { Textarea } from "@/components/ui/textarea"
 import {
-    Sheet,
-    SheetClose,
-    SheetContent,
-    SheetDescription,
-    SheetFooter,
-    SheetHeader,
-    SheetTitle,
-    SheetTrigger,
-  } from "@/components/ui/sheet"
-
-const SHEET_SIDES = ["top", "right", "bottom", "left"]
+    Card,
+    CardContent,
+    CardDescription,
+    CardFooter,
+    CardHeader,
+    CardTitle,
+  } from "@/components/ui/card"
 
 export default function Profile() {
-    return(
-<div className="grid grid-cols-2 gap-2">
-      {SHEET_SIDES.map((side) => (
-        <Sheet key={side}>
-          <SheetTrigger asChild>
-            <Button variant="outline">{side}</Button>
-          </SheetTrigger>
-          <SheetContent side={side}>
-            <SheetHeader>
-              <SheetTitle>Edit profile</SheetTitle>
-              <SheetDescription>
-                Make changes to your profile here. Click save when you're done.
-              </SheetDescription>
-            </SheetHeader>
-            <div className="grid gap-4 py-4">
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="name" className="text-right">
-                  Name
-                </Label>
-                <Input id="name" value="Pedro Duarte" className="col-span-3" />
-              </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="username" className="text-right">
-                  Username
-                </Label>
-                <Input id="username" value="@peduarte" className="col-span-3" />
-              </div>
-            </div>
-            <SheetFooter>
-              <SheetClose asChild>
-                <Button type="submit">Save changes</Button>
-              </SheetClose>
-            </SheetFooter>
-          </SheetContent>
-        </Sheet>
-      ))}
-    </div>
-    )
+    const [profile, setProfile] = useState({
+        name: "First Last",
+        email: "example@email.ex",
+        bio: "I love nature so much that nature loves me."
+    });
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setProfile({
+            ...profile,
+            [name]: value
+        });
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        // Save the profile state
+        console.log('Profile saved:', profile);
+    };
+    return (
+        <div className="w-screen h-screen flex justify-center items-center pb-20">
+            <Card className="bg-white">
+                <CardHeader>
+                    <h1 className="text-2xl font-bold text-p">User Profile</h1>
+                </CardHeader>
+                <CardContent className="">
+                    <form onSubmit={handleSubmit} className="space-y-4">
+                        <div className="">
+                            <label className="font-medium text-p">Name</label>
+                            <Input
+                                type="text"
+                                name="name"
+                                value={profile.name}
+                                onChange={handleChange}
+                                className="text-s"
+                            />
+                        </div>
+                        <div className="">
+                            <label className="font-medium text-p">Email</label>
+                            <Input
+                                type="email"
+                                name="email"
+                                value={profile.email}
+                                onChange={handleChange}
+                                className="text-s"
+                            />
+                        </div>
+                        <div className="">
+                            <label className="font-medium text-p">Bio</label>
+                            <Textarea
+                                name="bio"
+                                value={profile.bio}
+                                onChange={handleChange}
+                                className="text-s"
+                            />
+                        </div>
+                        <CardFooter className="space-y-4 justify-center">
+                            <Button type="submit" className="bg-p text-white">
+                                Save
+                            </Button>
+                        </CardFooter>
+                    </form>
+                </CardContent>
+            </Card>
+        </div>
+    );
 }
