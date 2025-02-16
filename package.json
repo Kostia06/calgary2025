@@ -9,6 +9,11 @@
         "lint": "next lint",
         "postinstall": "prisma generate"
     },
+    "functions": {
+        "api/*": {
+          "includeFiles": "prisma/**"
+        }
+    },
     "dependencies": {
         "@clerk/nextjs": "^6.11.3",
         "@hookform/resolvers": "^4.1.0",
