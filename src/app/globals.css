@@ -58,12 +58,15 @@
 }
 @layer base {
     * {
-        @apply border-border text-a;
+        @apply border-border text-a border-a;
     }
     body {
-        @apply bg-background text-foreground bg-p;
+        @apply bg-background text-foreground bg-a;
     }
     .smooth {
         @apply duration-300 ease-in-out transition-all;
+    }
+    .smooth-link {
+        @apply duration-200 ease-in-out transition-all;
     }
 }

@@ -1,15 +1,15 @@
 'use client';
 
 import { CiMap } from 'react-icons/ci';
-import { CiSearch } from 'react-icons/ci';
+import { CiCompass1 } from 'react-icons/ci';
 import { CiSettings } from 'react-icons/ci';
 import { usePathname } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 
 const links = [
+    { name: 'explore', href: '/explore', icon: <CiCompass1 /> },
     { name: 'map', href: '/map', icon: <CiMap /> },
-    { name: 'explore', href: '/explore', icon: <CiSearch /> },
     { name: 'profile', href: '/profile', icon: <CiSettings /> },
 ];
 
@@ -19,7 +19,7 @@ export default function NavBar() {
     const isHidden = showNavbar ? '' : 'translate-y-40';
     return (
         <div
-            className={`fixed bottom-0 flex items-center justify-evenly border-t-2 w-full smooth h-20 ${isHidden}`}
+            className={`fixed bottom-0 flex items-center justify-evenly border-t-2 w-screen smooth-link h-20 bg-p ${isHidden}`}
         >
             {links.map((link) => (
                 <LinkPage key={link.href} currentPath={pathname} link={link} />
@@ -31,15 +31,13 @@ export default function NavBar() {
 const LinkPage = ({ currentPath, link }) => {
     const pathname = usePathname();
     const isActive = currentPath === link.href;
-    const isActiveClass = isActive
-        ? '-translate-y-8 bg-red-200 rounded-full'
-        : '';
+    const isActiveClass = isActive ? '-translate-y-8 bg-s rounded-full' : '';
 
     return (
         <Link
             key={link.href}
             href={link.href}
-            className={`relative p-4 text-3xl smooth font-bold ${isActiveClass}`}
+            className={`relative p-4 text-4xl smooth-link *:stroke-[0.3] text-center ${isActiveClass}`}
         >
             {link.icon}
         </Link>
