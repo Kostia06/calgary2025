@@ -14,67 +14,62 @@ export async function POST(req) {
             );
         }
 
-        // Get the user's UUID from clerk_id
-        const user = await prisma.user.findFirst({
-            where: { clerk_id: userId },
-            select: { id: true }
-        });
+        console.log("userId:", userId)
 
-        if (!user) {
+        const getUser = await prisma.user.findFirst({
+            where: {
+                clerk_id: userId,
+            }
+        })
+
+        console.log("getUser:", getUser, id)
+
+        const posts = await prisma.posts.findUnique({
+            where: {
+                id: id,
+            }
+        })
+
+        if (!posts) {
             return NextResponse.json(
-                { error: 'User not found' },
+                { error: 'Post not found' },
                 { status: 404 }
             );
         }
 
-        // First check if user has already voted
-        const existingPost = await prisma.posts.findFirst({
+        const userVotes = await prisma.vote.findFirst({
             where: {
-                id: id,
-                votes: {
-                    some: {
-                        id: user.id
-                    }
-                }
+                postId: id,
+                userId: getUser.id,
             }
-        });
+        })
 
-        if (existingPost) {
+        if (userVotes) {
             return NextResponse.json(
-                { error: 'Already voted' },
+                { error: 'You have already upvoted this post' },
                 { status: 400 }
             );
         }
 
-        // If not voted, proceed with the vote
-        const post = await prisma.posts.update({
+        const makeAVote = await prisma.posts.update({
             where: {
-                id: id
+                id: id,
             },
             data: {
-                upvotes: {
-                    increment: 1
+                votes: {
+                    create: {
+                        userId: getUser.id,
+                    }
                 },
-                votes: {
-                    connect: {
-                        id: user.id
-                    }
-                }
-            },
-            include: {
-                voters: true,
-                votes: {
-                    select: {
-                        fullname: true,
-                        userType: true
-                    }
+                upvotes: {
+                    increment: 1,
                 }
             }
-        });
+        })        
 
         return NextResponse.json({ 
             success: true, 
-            post,
+            post: makeAVote,
             message: 'Vote recorded successfully' 
         });
 
