@@ -149,9 +149,6 @@ const PostCard = ({ post }) => {
             });
             const data = await response.json();
 
-            if (!response.ok) {
-                throw new Error(data.error || 'Failed to vote');
-            }
         } catch (error) {
             console.error('Error voting:', error);
             alert(error.message);
