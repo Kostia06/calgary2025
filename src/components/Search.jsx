@@ -2,10 +2,24 @@
 import { useState } from 'react';
 import { CiSearch } from 'react-icons/ci';
 import { Input } from '@/components/ui/input';
+import { Form } from 'react-hook-form';
 
 export default function Search({ search, setSearch }) {
     const [show, setShow] = useState(false);
     const size = show ? 'w-80' : 'w-14';
+
+    const handleSubmit = async(e) => {
+        e.preventDefault();
+        const searchItem = await fetch('/api/search/search-animals', {
+            method: 'POST',
+            body: JSON.stringify({
+                search,
+            }),
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+    }
     return (
         <div
             className={`flex bg-s  smooth items-center  h-14 rounded-full  ${size}`}
@@ -15,6 +29,8 @@ export default function Search({ search, setSearch }) {
             </button>
 
             {show && (
+                <form onSubmit={(e) => handleSubmit(e)}>
+
                 <Input
                     type="text"
                     value={search}
@@ -27,6 +43,8 @@ export default function Search({ search, setSearch }) {
                         boxShadow: 'none',
                     }}
                 />
+                </form>
+
             )}
         </div>
     );

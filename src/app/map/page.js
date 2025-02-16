@@ -8,8 +8,8 @@ import { useEffect, useState } from 'react';
 export default function MapPage() {
     // const [search, setSearch] = useState("");
     const searchParams = useSearchParams();
-    const lat = searchParams.get('lat');
-    const lng = searchParams.get('lng');
+    const lat = searchParams.get('lat') || 51.037397;
+    const lng = searchParams.get('lng') || -114.173712;
 
     return (
         <div className="w-screen h-screen">

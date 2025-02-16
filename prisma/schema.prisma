@@ -29,5 +29,6 @@ model Posts {
   upvotes     Int      @default(0)
   lat         String
   lng         String
+  tags        String[]
   user        User     @relation(fields: [userId], references: [id])
 }
