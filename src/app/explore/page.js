@@ -25,7 +25,7 @@ export default function Map() {
 
     return (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 p-6 mb-20">
-            {posts?.map((post) => (
+            {posts.filter((post) => post.imageUrl)?.map((post) => (
                 <PostCard key={post.id} post={post} />
             ))}
 
