@@ -23,7 +23,7 @@ export default function Map() {
     }
 
     return (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 p-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 p-6 mb-20">
             {posts?.map((post) => (
                 <PostCard key={post.id} post={post} />
             ))}
@@ -56,8 +56,11 @@ const getScrollY = () => {
 
 const Search = ({ search, setSearch }) => {
     const show = getScrollY();
+    const showCss = !show ? '-translate-y-24' : 'translate-y-0';
     return (
-        <div className="absolute top-5 p-2 left-1/2 -translate-x-1/2 bg-s w-80 h-14 rounded-full flex items-center justify-center">
+        <div
+            className={`smooth ${showCss} fixed top-5 p-2 left-1/2 -translate-x-1/2 bg-s w-80 h-14 rounded-full flex items-center justify-center`}
+        >
             <Input
                 type="text"
                 value={search}
