@@ -1,10 +1,10 @@
-import prisma from "@/lib/prisma";
-import { getAuth } from "@clerk/nextjs/server";
-import { NextResponse } from "next/server";
+import prisma from '@/lib/prisma';
+import { getAuth } from '@clerk/nextjs/server';
+import { NextResponse } from 'next/server';
 
 export async function POST(req) {
     try {
-        const { id } = await req.json();
+        const { postId, action } = await req.json(); // action could be 'increase' or 'decrease'
         const { userId } = getAuth(req);
 
         if (!userId) {
@@ -73,14 +73,16 @@ export async function POST(req) {
             message: 'Vote recorded successfully' 
         });
 
+        return NextResponse.json({ error: 'Invalid action' }, { status: 400 });
     } catch (error) {
         console.error('Vote error:', error);
         return NextResponse.json(
-            { 
+            {
                 success: false,
-                error: error.message || 'Failed to record vote'
-            }, 
+                error: error.message || 'Failed to process vote',
+            },
             { status: 500 }
         );
     }
 }
+
