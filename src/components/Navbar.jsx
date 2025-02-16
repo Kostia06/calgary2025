@@ -16,7 +16,7 @@ const links = [
 export default function NavBar() {
     const pathname = usePathname();
     const showNavbar = useNavbarVisibilityOnScroll();
-    const isHidden = showNavbar ? '' : 'translate-y-40';
+    const isHidden = true ? '' : 'translate-y-40';
     return (
         <div
             className={`fixed bottom-0 flex items-center justify-evenly border-t-2 w-screen smooth-link h-20 bg-p ${isHidden}`}
