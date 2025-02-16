@@ -5,7 +5,7 @@ import os
 
 # Define paths
 training_images_path = "./training_images"
-num_classes = 2
+num_classes = 90
 BATCH_SIZE = 32
 IMAGE_SIZE = (128, 128)
 VALIDATION_SPLIT = 0.1  # 10% validation split
