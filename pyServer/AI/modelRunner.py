@@ -7,7 +7,7 @@ import cv2
 import sys
 
 # Constants
-MODEL_PATH = "./cnn_model(4).h5"
+MODEL_PATH = "./AI/cnn_model(4).h5"
 IMAGE_SIZE = (128, 128)  # Match your training size
 
 # Load the trained model

@@ -5,7 +5,7 @@ import mapboxgl from 'mapbox-gl';
 
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
 
-const Map = ({ lng = -114.1371633, lat = 51.0761024, zoom = 15, svgIcon, points = [] }) => {
+const Map = ({ lng = -114.1371633, lat = 52.0761024, zoom = 15, svgIcon, points = [] }) => {
     const mapContainer = useRef(null);
 
     useEffect(() => {

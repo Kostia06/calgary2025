@@ -35,3 +35,6 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 
 ## AI Training Repo
 https://github.com/adimulunj/calgary2025AI.git
+
+## Flask Server
+to run flask server include Pexels API key and Hugging face API key

@@ -17,6 +17,20 @@ export const POST = async (req) => {
         return new Response('Missing required fields', { status: 400 })
     }
 
+
+    const getImageTags = await fetch('https://f69d-136-159-213-104.ngrok-free.app/process_image', {
+        method: 'POST',
+        body: JSON.stringify({
+            url: imageUrl,
+        }),
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    })
+
+    const tags = await getImageTags.json()
+    console.log(tags.output.split(',')[0]);
+
     try {
         const post = await prisma.posts.create({
             data: {
@@ -29,7 +43,11 @@ export const POST = async (req) => {
                     }
                 },
                 lat,
-                lng
+                lng,
+                // TODO: handle tags
+                tags: [
+                    tags.output.split(',')[0],
+                ]
             }
         })
 

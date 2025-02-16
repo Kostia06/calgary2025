@@ -38,6 +38,19 @@ const uploadToSupabase = async (
 
         if (urlError) throw urlError;
 
+        // const getImageTags = await fetch('https://f69d-136-159-213-104.ngrok-free.app/process_image', {
+        //     method: 'POST',
+            // body: JSON.stringify({
+            //     url: "https://media.npr.org/assets/img/2021/11/10/white-tailed-deer-1-0574346564fb5d5f806bf50c03d4e5f37651a753.jpg?s=1200&c=85&f=webp"
+            // }),
+        //     headers: {
+        //         'Content-Type': 'application/json',
+        //     },
+        // })
+
+        // const json = await getImageTags.json();
+        // console.log(json);
+
         setImageUrl(urlData.publicUrl);
     } catch (error) {
         console.error('Error uploading image:', error);
@@ -352,7 +365,11 @@ const ShowCamera = ({
 //
 // ================ MAIN COMPONENT ================
 //
+<<<<<<< HEAD
 export default function ImageUploade({ open, setOpen }) {
+=======
+export default function ImageUploader() {
+>>>>>>> d95edb8482251d3682a788c17f5612c4d38429d8
     const fileInputRef = useRef(null);
 
     // Manage uploading and image state

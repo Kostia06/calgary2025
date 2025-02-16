@@ -106,9 +106,39 @@ const PostCard = ({ post }) => {
     const { imageUrl, lat, lng, title, description, upvotes } = post;
     const sLat = parseFloat(lat).toFixed(2);
     const sLng = parseFloat(lng).toFixed(2);
+<<<<<<< HEAD
     const ref = useRef(null);
     const visible = getVisible(ref);
     const visibleCss = visible ? 'opacity-100 scale-100' : 'scale-50 opacity-0';
+=======
+
+    const handleUpvote = async(e) => {
+        e.preventDefault();
+        try {
+            const response = await fetch('/api/posts/make-vote', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ id: post.id }),
+            });
+
+            const data = await response.json();
+            
+            if (!response.ok) {
+                throw new Error(data.error || 'Failed to vote');
+            }
+
+            // Optionally refresh the page or update the UI
+            window.location.reload();
+            
+        } catch (error) {
+            console.error('Error voting:', error);
+            // Optionally show error to user
+            alert(error.message);
+        }
+    }
+>>>>>>> d95edb8482251d3682a788c17f5612c4d38429d8
     return (
         <Card
             ref={ref}
@@ -146,7 +176,7 @@ const PostCard = ({ post }) => {
 
                 {/* Upvote Button */}
                 <div className="flex items-center space-x-6 w-full">
-                    <Button className="w-full bg-p duration-300 ease-in-out transition-all hover:bg-s hover:scale-110 hover:shadow-md hover:shadow-black">
+                    <Button onClick={(e) => handleUpvote(e)} className="w-full bg-p duration-300 ease-in-out transition-all hover:bg-s hover:scale-110 hover:shadow-md hover:shadow-black">
                         Upvote
                     </Button>
                     <Button className="w-full bg-p duration-300 ease-in-out transition-all hover:bg-s hover:scale-110 hover:shadow-md hover:shadow-black">
