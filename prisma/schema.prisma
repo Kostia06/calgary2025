@@ -22,7 +22,8 @@ model User {
 
 model Posts {
   id          String   @id @default(uuid()) @db.Uuid
-  imageUrl    String
+  imageUrl    String?
+  videoUrl    String?
   title       String
   description String
   createdAt   DateTime @default(now())
