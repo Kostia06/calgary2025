@@ -1,6 +1,6 @@
 import prisma from "@/lib/prisma";
 
-export const POST = async (req) => {
+export const POST = async(req) => {
     const { search } = await req.json();
 
     try {
@@ -9,13 +9,19 @@ export const POST = async (req) => {
                 tags: {
                     has: search,
                 }
+            },
+            include: {
+                user: {
+                    select: {
+                        userType: true,
+                    }
+                }
             }
-        });
+        })
 
-        console.log(posts)
         return new Response(JSON.stringify(posts), { status: 200 })
-    } catch (error) {
-        console.log(error)
-        return new Response(error.message, { status: 400 })
+    } catch(err) {
+        console.log(err, "Errorrrrrr")
+        return new Response(err.message, { status: 400 })
     }
 }

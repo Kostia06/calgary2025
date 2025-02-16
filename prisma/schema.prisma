@@ -7,6 +7,12 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum UserType {
+  USER
+  ADMIN
+  INFLUENCER
+}
+
 model User {
   id         String   @id @default(uuid()) @db.Uuid
   email      String   @unique
@@ -16,6 +22,7 @@ model User {
   updatedAt  DateTime @default(now()) @updatedAt
   fullname   String
   Posts      Posts[]
+  userType   UserType   @default(USER)
 }
 
 model Posts {
@@ -29,6 +36,6 @@ model Posts {
   upvotes     Int      @default(0)
   lat         String
   lng         String
-  tags        String[]
+  tags        String[] @default([])
   user        User     @relation(fields: [userId], references: [id])
 }
