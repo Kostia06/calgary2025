@@ -28,7 +28,7 @@ export default function Search({ search, setSearch }) {
 
     return (
         <div
-            className={`flex bg-s  smooth items-center  h-14 rounded-full  ${size}`}
+            className={`flex bg-s  smooth items-center  h-14 rounded-full bg-opacity-60 ${size}`}
         >
             <button onClick={() => setShow(!show)}>
                 <CiSearch className="text-4xl *:fill-a w-9 h-9 *:stroke-[0.7] mx-2 translate-x-[2px]" />
