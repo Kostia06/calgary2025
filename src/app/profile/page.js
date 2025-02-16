@@ -27,13 +27,6 @@ export default function Profile() {
 }
 
 function ProfileCard() {
-  
-
-  const [profile, setProfile] = useState({
-    name: "First Last",
-    email: "example@email.ex",
-    bio: "I love nature so much that nature loves me."
-  });
 
   const fetchUserProfile = async() => {
     const userProfile = await fetch('/api/user/get-user-profile', {
@@ -41,11 +34,22 @@ function ProfileCard() {
     })
     const user = await userProfile.json();
     console.log(user, "USERRRR")
-  }
+    setProfile({
+      name: user.fullname || "John Doe",
+      email: user.email || "example@email.com",
+      bio: "I love nature so much that nature loves me."
+    });
+  };
 
   useEffect(() => {
     fetchUserProfile();
-  }, [])
+  }, []);
+
+  const [profile, setProfile] = useState({
+    name: "",
+    email: "",
+    bio: ""
+  });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -107,7 +111,7 @@ function ProfileCard() {
           </form>
         </CardContent>
         <CardFooter className="justify-center">
-          <Button type="submit" className="bg-p text-white">Save</Button>
+          <Button type="submit" onClick={handleSubmit} className="bg-p text-white">Save</Button>
         </CardFooter>
       </Card>
     </div>
