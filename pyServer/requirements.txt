@@ -2,7 +2,7 @@ beautifulsoup4==4.13.3
 Flask==3.1.0
 Flask_Cors==5.0.0
 geopy==2.4.1
-numpy==2.2.3
+
 opencv_contrib_python==4.10.0.82
 opencv_python==4.9.0.80
 opencv_python_headless==4.10.0.84
