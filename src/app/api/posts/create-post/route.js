@@ -18,18 +18,18 @@ export const POST = async (req) => {
     }
 
 
-    const getImageTags = await fetch('https://b69f-136-159-213-104.ngrok-free.app/process_image', {
-        method: 'POST',
-        body: JSON.stringify({
-            url: imageUrl,
-        }),
-        headers: {
-            'Content-Type': 'application/json',
-        },
-    })
+    // const getImageTags = await fetch('https://761e-136-159-213-77.ngrok-free.app/process_image', {
+    //     method: 'POST',
+    //     body: JSON.stringify({
+    //         url: imageUrl,
+    //     }),
+    //     headers: {
+    //         'Content-Type': 'application/json',
+    //     },
+    // })
 
-    const tags = await getImageTags.json()
-    console.log(tags.output.split(',')[0]);
+    // const tags = await getImageTags.json()
+    // console.log(tags.output.split(',')[0]);
 
     try {
         const post = await prisma.posts.create({
@@ -46,7 +46,9 @@ export const POST = async (req) => {
                 lng,
                 // TODO: handle tags
                 tags: [
-                    tags.output.split(',')[0],
+                    // tags.output.split(',')[0],
+                    "nature",
+                    "animals"
                 ]
             }
         })
